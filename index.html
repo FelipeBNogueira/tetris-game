@@ -3,12 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tetris</title>
+  <title>Tetris Estiloso</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Tetris Game</h1>
-  <canvas id="tetris" width="240" height="400"></canvas>
+  <div id="tetris">
+    <canvas id="canvas" width="240" height="400"></canvas>
+    <div id="score">Score: 0</div>
+    <button id="restartBtn">Reiniciar</button>
+    <div id="instructions">
+      Use as setas do teclado para jogar.<br />
+      Espaço para pausar.
+    </div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
