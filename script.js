@@ -181,4 +181,75 @@ function playerRotate(dir) {
 function rotate(matrix, dir) {
   for (let y = 0; y < matrix.length; y++) {
     for (let x = 0; x < y; x++) {
-      [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix
+      [matrix[x][y], matrix[y][x]] = [matrix[y][x], matrix[x][y]];
+    }
+  }
+  if (dir > 0) {
+    matrix.forEach(row => row.reverse());
+  } else {
+    matrix.reverse();
+  }
+}
+
+let dropCounter = 0;
+let dropInterval = 800;
+let lastTime = 0;
+
+function update(time = 0) {
+  const deltaTime = time - lastTime;
+  lastTime = time;
+
+  dropCounter += deltaTime;
+  if (dropCounter > dropInterval && !isPaused) {
+    playerDrop();
+  }
+
+  draw();
+  requestAnimationFrame(update);
+}
+
+function draw() {
+  context.fillStyle = '#10121a';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  drawMatrix(arena, {x:0, y:0});
+  drawMatrix(player.matrix, player.pos);
+}
+
+function updateScore() {
+  scoreEl.textContent = `Score: ${player.score}`;
+}
+
+let isPaused = false;
+
+document.addEventListener('keydown', event => {
+  if (event.key === 'ArrowLeft') {
+    playerMove(-1);
+  } else if (event.key === 'ArrowRight') {
+    playerMove(1);
+  } else if (event.key === 'ArrowDown') {
+    playerDrop();
+  } else if (event.key === 'ArrowUp') {
+    playerRotate(1);
+  } else if (event.code === 'Space') {
+    isPaused = !isPaused;
+  }
+});
+
+restartBtn.addEventListener('click', () => {
+  arena.forEach(row => row.fill(0));
+  player.score = 0;
+  updateScore();
+  playerReset();
+  isPaused = false;
+});
+
+const player = {
+  pos: {x:0, y:0},
+  matrix: null,
+  score: 0
+};
+
+playerReset();
+updateScore();
+update();
